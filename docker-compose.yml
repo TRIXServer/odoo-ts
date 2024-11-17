@@ -5,6 +5,7 @@ services:
   web:
     build: .
     image: odoo:15
+    user: root
     depends_on:
       - db
     ports:
@@ -13,9 +14,8 @@ services:
       - "8072:8072"
     volumes:
       - odoo-web-data:/var/lib/odoo  
-      - ./config:/etc/odoo
+      - odoo-web-config:/etc/odoo
       - ./addons:/mnt/extra-addons
-    user: root
     secrets:
       - postgresql_password
     environment:
@@ -24,7 +24,7 @@ services:
 
   db:
     image: postgres:13
-    user: root
+    # user: root
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgresql_password
@@ -39,6 +39,7 @@ services:
 volumes:
   odoo-web-data:
   odoo-db-data:
+  odoo-web-config:
 
 secrets:
   postgresql_password:
